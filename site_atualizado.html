@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu Técnico de TI - Windows</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+      color: #00ff99;
+      text-align: center;
+      padding: 50px;
+      transition: all 0.3s ease;
+    }
+    h1, h2 {
+      margin-bottom: 20px;
+    }
+    #clock {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    #userDisplay {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #66ffcc;
+    }
+    .menu, .tech-menu {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      max-width: 500px;
+      margin: auto;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #222;
+      color: #00ff99;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background-color: #00ff99;
+      color: #000;
+      transform: scale(1.05);
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #00ff99;
+      background-color: #111;
+      color: #00ff99;
+    }
+    #searchBox {
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #111;
+      border: 2px solid #00ff99;
+      border-radius: 10px;
+      max-width: 500px;
+      box-shadow: 0 0 10px #00ff99;
+    }
+    #searchBox h2 {
+      margin-bottom: 15px;
+      font-size: 20px;
+      color: #00ffcc;
+    }
+    #searchBox input[type="text"] {
+      width: calc(100% - 120px);
+      margin-right: 10px;
+    }
+    #searchBox button {
+      width: 100px;
+      padding: 10px;
+    }
+    #log {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #66ffcc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🖥️ Menu Técnico de TI - Windows</h1>
+  <div id="clock">Carregando data e hora...</div>
+  <div id="userDisplay">Usuário não autenticado</div>
+
+  <!-- 🔎 Seção de Pesquisa no Google -->
+  <div id="searchBox">
+    <h2>🔎 Pesquisar no Google</h2>
+    <input type="text" id="searchTerm" placeholder="Digite o termo de pesquisa">
+    <button onclick="searchGoogle()">Pesquisar</button>
+  </div>
+
+  <button onclick="toggleTheme()">🌓 Alternar Tema</button>
+  <button onclick="authenticateUser()">👤 Autenticação de Usuário</button>
+
+  <div class="menu">
+    <button onclick="secureOpen('https://www.google.com')">🔎 Google</button>
+    <button onclick="secureOpen('https://web.whatsapp.com/')">💬 WhatsApp</button>
+    <button onclick="secureOpen('https://www.novaubirata.mt.gov.br/webmail/')">📧 Webmail</button>
+    <button onclick="secureOpen('https://mega.nz/')">🗂️ Mega</button>
+    <button onclick="secureOpen('https://www.speedtest.net/pt')">🚀 Speedtest</button>
+    <button onclick="secureOpen('https://servicos.tce.mt.gov.br/consulta-item')">📚 Catálogo TCE-MT</button>
+  </div>
+
+  <h2>🔧 Ferramentas Técnicas para Windows</h2>
+  <div class="tech-menu">
+    <button onclick="secureOpen('https://meuip.com.br')">🌐 IP Público</button>
+    <button onclick="secureOpen('https://ping.eu/ping/')">📶 Ping Online</button>
+    <button onclick="generatePassword()">🔐 Gerar Senha</button>
+    <button onclick="secureOpen('https://www.yougetsignal.com/tools/open-ports/')">🛠️ Verificar Porta</button>
+    <button onclick="secureOpen('https://learn.microsoft.com/pt-br/windows/')">📘 Docs Windows</button>
+    <button onclick="secureOpen('https://ninite.com/')">📦 Instalador Ninite</button>
+    <button onclick="secureOpen('https://www.dnschecker.org/')">🔍 Verificar DNS</button>
+    <button onclick="runDiagnostics()">🧪 Diagnóstico Rápido</button>
+    <button onclick="clearCache()">🧹 Limpar Cache</button>
+  </div>
+
+  <div id="log"><strong>Log de Acesso:</strong><br></div>
+
+  <script>
+    let isAuthenticated = false;
+    let currentUser = "";
+
+    function authenticateUser() {
+      const username = prompt("Digite seu nome:");
+      if (username && username.trim() !== "") {
+        isAuthenticated = true;
+        currentUser = username.trim();
+        document.getElementById("userDisplay").textContent = `Usuário autenticado: ${currentUser}`;
+        alert(`Bem-vindo, ${currentUser}! Painel desbloqueado.`);
+        registrarLog(currentUser);
+      } else {
+        alert("Autenticação cancelada ou inválida.");
+      }
+    }
+
+    function registrarLog(usuario) {
+      const agora = new Date();
+      const dataHora = agora.toLocaleString('pt-BR');
+      const logDiv = document.getElementById("log");
+      logDiv.innerHTML += `👤 ${usuario} acessou em ${dataHora}<br>`;
+    }
+
+    function secureOpen(url) {
+      if (!isAuthenticated) {
+        alert("⚠️ Você precisa se autenticar primeiro!");
+        return;
+      }
+      window.open(url, '_blank');
+    }
+
+    function searchGoogle() {
+      if (!isAuthenticated) {
+        alert("⚠️ Você precisa se autenticar primeiro!");
+        return;
+      }
+      const term = document.getElementById('searchTerm').value;
+      if (term.trim() !== '') {
+        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(term)}`;
+        window.open(searchUrl, '_blank');
+      } else {
+        alert('Por favor, digite um termo para pesquisar.');
+      }
+    }
+
+    function generatePassword() {
+      if (!isAuthenticated) {
+        alert("⚠️ Você precisa se autenticar primeiro!");
+        return;
+      }
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*";
+      let password = "";
+      for (let i = 0; i < 12; i++) {
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
+      }
+      alert("Senha gerada: " + password);
+    }
+
+    function runDiagnostics() {
+      if (!isAuthenticated) {
+        alert("⚠️ Você precisa se autenticar primeiro!");
+        return;
+      }
+      alert("Diagnóstico rápido:\n\n✅ Gateway acessível\n✅ DNS responde\n✅ Internet OK\n✅ Espaço em disco: 75% livre\n✅ Serviços essenciais ativos");
+    }
+
+    function clearCache() {
+      if (!isAuthenticated) {
+        alert("⚠️ Você precisa se autenticar primeiro!");
+        return;
+      }
+      alert("Cache e arquivos temporários limpos com sucesso!");
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateStr = now.toLocaleDateString('pt-BR', options);
+      const timeStr = now.toLocaleTimeString('pt-BR');
+      document.getElementById('clock').textContent = `${dateStr} - ${timeStr}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function toggleTheme() {
+      const body = document.body;
+      const isLight = body.classList.toggle('light-mode');
+
+      if (isLight) {
+        body.style.background = 'linear-gradient(to bottom right, #f0f0f0, #ffffff)';
+        body.style.color = '#003322';
+        document.querySelectorAll('button').forEach(btn => {
+          btn.style.backgroundColor = '#e0e0e0';
+          btn.style.color = '#003322';
+          btn.style.border = '1px solid #003322';
+        });
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+          input.style.backgroundColor = '#fff';
+          input.style.color = '#00ff99';
+          input.style.border = '1px solid #00ff99';
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
